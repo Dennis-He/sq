@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏夹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef2f8;
+            color: #0b1a33;
+            padding: 0.8rem 1rem;
+            line-height: 1.3;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            /* ★ 关键：整体垂直居中，多余空间平分到上下，而不是塞进某一行 */
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #071122;
+            flex-shrink: 0;
+            padding-left: 0.2rem;
+        }
+
+        /* ★ 卡片：不再拉伸，高度由内容决定 */
+        .category {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            padding: 0.5rem 0.7rem 0.6rem 0.7rem;
+            border: 1px solid #e4eaf2;
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 auto;      /* ← 按内容高度，不拉伸 */
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+            padding-bottom: 0.2rem;
+            border-bottom: 1px solid #e9edf2;
+            flex-shrink: 0;
+        }
+        .category-header h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #071122;
+        }
+        .category-header .badge {
+            background: #d4e0f5;
+            color: #0f3a7a;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 0.05rem 0.5rem;
+            border-radius: 20px;
+        }
+
+        .link-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        /* ★ 所有链接块统一固定高度，行高自然一致 */
+        .link-item {
+            flex: 0 0 calc(100% / 6 - 0.38rem);
+            height: 52px;                    /* ← 统一固定高度 */
+            background: #f2f6fc;
+            border-radius: 6px;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid #e4eaf2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.12s ease;
+            overflow: hidden;
+        }
+
+        .link-row-5 .link-item {
+            flex: 0 0 calc(20% - 0.36rem);
+        }
+
+        .link-row-forum .link-item {
+            flex: 0 0 calc(100% / 7 - 0.39rem);
+        }
+
+        .link-row-video .link-item {
+            flex: 0 0 calc(100% / 8 - 0.4rem);
+        }
+
+        .link-item:hover {
+            background: #ffffff;
+            border-color: #9bb9e6;
+            box-shadow: 0 2px 6px rgba(26, 79, 207, 0.12);
+        }
+
+        .link-item a {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #0b1a33;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            width: 100%;
+            transition: color 0.1s;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+        .link-item a:hover {
+            color: #1a4fcf;
+        }
+        .link-item a::before {
+            content: "·";
+            color: #9bb0c8;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .link-item:hover a::before {
+            color: #1a4fcf;
+        }
+
+        /* ============ 低分辨率：允许滚动 ============ */
+        @media (max-width: 1400px), (max-height: 800px) {
+            body {
+                overflow: auto;
+                height: auto;
+                padding: 0.6rem 0.8rem;
+            }
+            .container {
+                height: auto;
+                justify-content: flex-start;   /* ← 滚动模式下不再居中 */
+            }
+        }
+
+        /* 更窄的屏幕：每行个数减少，字和行高不变 */
+        @media (max-width: 900px) {
+            .link-item {
+                flex: 0 0 calc(33.33% - 0.3rem);
+            }
+            .link-row-5 .link-item {
+                flex: 0 0 calc(33.33% - 0.3rem);
+            }
+            .link-row-forum .link-item {
+                flex: 0 0 calc(33.33% - 0.3rem);
+            }
+            .link-row-video .link-item {
+                flex: 0 0 calc(33.33% - 0.3rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .link-item {
+                flex: 0 0 calc(50% - 0.2rem);
+            }
+            .link-row-5 .link-item {
+                flex: 0 0 calc(50% - 0.2rem);
+            }
+            .link-row-forum .link-item {
+                flex: 0 0 calc(50% - 0.2rem);
+            }
+            .link-row-video .link-item {
+                flex: 0 0 calc(50% - 0.2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="page-title">📂 我的收藏夹</div>
+
+    <!-- 常用网站：3行 × 6个 -->
+    <div class="category">
+        <div class="category-header"><h3>🌐 常用网站</h3><span class="badge">快速访问</span></div>
+        <div class="link-row">
+            <div class="link-item"><a href="http://www.sohu.com/" target="_blank">搜狐</a></div>
+            <div class="link-item"><a href="http://www.163.com/" target="_blank">网易</a></div>
+            <div class="link-item"><a href="https://www.ruimingtools.cn/" target="_blank">锐铭工具</a></div>
+            <div class="link-item"><a href="https://www.sina.com.cn/" target="_blank">新浪</a></div>
+            <div class="link-item"><a href="https://www.sandvik.coromant.cn/" target="_blank">山特维克可乐满</a></div>
+            <div class="link-item"><a href="http://www.10086.cn/" target="_blank">浙江移动</a></div>
+
+            <div class="link-item"><a href="http://www.soso.com/" target="_blank">搜搜</a></div>
+            <div class="link-item"><a href="http://www.google.com/" target="_blank">谷歌</a></div>
+            <div class="link-item"><a href="http://www.baidu.com/" target="_blank">百度</a></div>
+            <div class="link-item"><a href="https://www.deepseek.com/" target="_blank">deepseek</a></div>
+            <div class="link-item"><a href="https://www.qianwen.com/" target="_blank">千问</a></div>
+            <div class="link-item"><a href="https://www.doubao.com/" target="_blank">豆包</a></div>
+
+            <div class="link-item"><a href="https://cli.im/" target="_blank">草料二维码</a></div>
+            <div class="link-item"><a href="https://typhoon.slt.zj.gov.cn/" target="_blank">台风路径</a></div>
+            <div class="link-item"><a href="http://www.amap.com/" target="_blank">高德</a></div>
+            <div class="link-item"><a href="http://www.huawei.com/" target="_blank">华为官网</a></div>
+            <div class="link-item"><a href="https://cloud.huawei.com/" target="_blank">华为云管家</a></div>
+            <div class="link-item"><a href="http://192.168.1.1/" target="_blank">192.168.1.1</a></div>
+        </div>
+    </div>
+
+    <!-- 邮箱及日历：1行 × 5个 -->
+    <div class="category">
+        <div class="category-header"><h3>✉️ 邮箱 & 日历</h3><span class="badge">协作</span></div>
+        <div class="link-row link-row-5">
+            <div class="link-item"><a href="http://www.126.com/" target="_blank">网易126邮箱</a></div>
+            <div class="link-item"><a href="http://www.live.com/" target="_blank">微软邮箱</a></div>
+            <div class="link-item"><a href="https://outlook.live.com/calendar/" target="_blank">微软日历</a></div>
+            <div class="link-item"><a href="http://mail.qq.com/" target="_blank">腾讯邮箱</a></div>
+            <div class="link-item"><a href="https://note.youdao.com/web" target="_blank">有道云笔记</a></div>
+        </div>
+    </div>
+
+    <!-- 购物及银行：2行 × 5个 -->
+    <div class="category">
+        <div class="category-header"><h3>🛍️ 购物 & 银行</h3><span class="badge">安全</span></div>
+        <div class="link-row link-row-5">
+            <div class="link-item"><a href="https://www.taobao.com/" target="_blank">淘宝</a></div>
+            <div class="link-item"><a href="https://www.jd.com/" target="_blank">京东</a></div>
+            <div class="link-item"><a href="https://www.95598.cn/osgweb/login" target="_blank">国家电网</a></div>
+            <div class="link-item"><a href="https://www.txffp.com/" target="_blank">票根网</a></div>
+            <div class="link-item"><a href="https://www.zjetc.net/" target="_blank">高速公路服务网</a></div>
+            <div class="link-item"><a href="https://www.zj96596.com/" target="_blank">浙江农信</a></div>
+            <div class="link-item"><a href="https://www.icbc.com.cn/" target="_blank">工商银行</a></div>
+            <div class="link-item"><a href="https://www.boc.cn/" target="_blank">中国银行</a></div>
+            <div class="link-item"><a href="https://www.cgbchina.com.cn/" target="_blank">广发银行</a></div>
+            <div class="link-item"><a href="https://www.spdb.com.cn/" target="_blank">浦发银行</a></div>
+        </div>
+    </div>
+
+    <!-- 论坛：7个一行 -->
+    <div class="category">
+        <div class="category-header"><h3>💬 论坛</h3><span class="badge">社区</span></div>
+        <div class="link-row link-row-forum">
+            <div class="link-item"><a href="http://www.zaixs.com/" target="_blank">萧内网</a></div>
+            <div class="link-item"><a href="https://bbs.deepin.org/" target="_blank">深度论坛</a></div>
+            <div class="link-item"><a href="https://forum.ubuntu.org.cn/" target="_blank">Ubuntu中文论坛</a></div>
+            <div class="link-item"><a href="https://club.autohome.com.cn/bbs/forum-c-5499-1.html" target="_blank">比亚迪汉论坛</a></div>
+            <div class="link-item"><a href="https://www.19lou.com/" target="_blank">19楼</a></div>
+            <div class="link-item"><a href="https://www.x.com/" target="_blank">x.com</a></div>
+            <div class="link-item"><a href="https://cn.club.vmall.com/" target="_blank">花粉俱乐部</a></div>
+        </div>
+    </div>
+
+    <!-- 汽车网站：1行 × 5个 -->
+    <div class="category">
+        <div class="category-header"><h3>🚗 汽车网站</h3><span class="badge">车迷</span></div>
+        <div class="link-row link-row-5">
+            <div class="link-item"><a href="https://www.autohome.com.cn/" target="_blank">汽车之家</a></div>
+            <div class="link-item"><a href="https://www.xcar.com.cn/" target="_blank">爱卡汽车</a></div>
+            <div class="link-item"><a href="https://bbs.pcauto.com.cn/" target="_blank">太平洋汽车</a></div>
+            <div class="link-item"><a href="https://www.yiche.com/" target="_blank">易车网</a></div>
+            <div class="link-item"><a href="https://docs.qq.com/sheet/DQWJweHVmQUtacUFu?tab=BB08J2" target="_blank">BYD车机APP</a></div>
+        </div>
+    </div>
+
+    <!-- 视频网站：8个一行 -->
+    <div class="category">
+        <div class="category-header"><h3>🎬 视频 & 直播</h3><span class="badge">影音</span></div>
+        <div class="link-row link-row-video">
+            <div class="link-item"><a href="https://www.zhibo8.com/" target="_blank">直播吧</a></div>
+            <div class="link-item"><a href="http://www.yoozb.live/" target="_blank">无插件直播</a></div>
+            <div class="link-item"><a href="https://www.yangshipin.cn/" target="_blank">央视频</a></div>
+            <div class="link-item"><a href="https://www.douyin.com/" target="_blank">抖音</a></div>
+            <div class="link-item"><a href="http://www.youku.com/" target="_blank">优酷</a></div>
+            <div class="link-item"><a href="https://www.tvmao.com/" target="_blank">电视猫</a></div>
+            <div class="link-item"><a href="https://www.radio.cn/pc-portal/erji/radioStation.html" target="_blank">云听</a></div>
+            <div class="link-item"><a href="https://www.qtfm.cn/radiopage/" target="_blank">蜻蜓FM</a></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
