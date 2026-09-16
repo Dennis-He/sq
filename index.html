@@ -176,7 +176,7 @@
             }
         }
 
-        /* ============ 手机：每行 2 个，紧凑 ============ */
+        /* ============ 手机：每行 2 个，字体尽量大 ============ */
         @media (max-width: 600px) {
             body {
                 padding: 0.4rem 0.5rem;
@@ -195,7 +195,7 @@
                 margin-bottom: 0.3rem;
             }
             .category-header h3 {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
             .category-header .badge {
                 font-size: 0.55rem;
@@ -209,16 +209,16 @@
             .link-row-forum .link-item,
             .link-row-video .link-item {
                 flex: 0 0 calc(50% - 0.2rem);  /* ← 每行 2 个 */
-                height: 36px;
-                padding: 0.1rem 0.2rem;
+                height: 52px;                   /* ← 块高度加大 */
+                padding: 0.2rem 0.4rem;
                 border-radius: 4px;
             }
             .link-item a {
-                font-size: 0.72rem;
-                gap: 2px;
+                font-size: 1rem;                /* ← 字号加大到 1rem */
+                gap: 4px;
             }
             .link-item a::before {
-                font-size: 0.8rem;
+                font-size: 1.1rem;
             }
         }
     </style>
